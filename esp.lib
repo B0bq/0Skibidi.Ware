@@ -701,6 +701,9 @@ end
 function EspInterface.getWeapon(player)
     char1 = player.Character
     tool = char1:FindFirstChildWhichIsA("Tool")
+	if not tool then
+		return
+	end
 	return tool.Name;
 end
 
