@@ -53,12 +53,18 @@ aimbot.GetClosestPart = function(camera, mousePos)
                     local part = char and char:FindFirstChild(aimbot.PlayerPart)
                     if part then
                         if aimbot.VisibilityCheck then
+                            local direction = (part.Position - camera.CFrame.Position)
                             local params = RaycastParams.new()
                             params.FilterType = Enum.RaycastFilterType.Blacklist
                             params.IgnoreWater = true
-                            params.FilterDescendantsInstances = {char, plr.Character}
-                            local raycast = workspace:Raycast(camera.CFrame.Position, (part.Position - camera.CFrame.Position).Unit * 999, params)
-                            if raycast then continue end
+                            params.FilterDescendantsInstances = {plr.Character, char}
+                            
+                            local result = workspace:Raycast(camera.CFrame.Position, direction, params)
+                            
+                            -- If something is in the way that's NOT the target part, skip it
+                            if result and result.Instance ~= part then
+                                continue
+                            end
                         end
                         table.insert(parts, part)
                     end
